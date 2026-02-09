@@ -1,0 +1,15 @@
+# KubeSec Bank Helm Chart
+# Deploys the complete banking microservices stack
+apiVersion: v2
+name: kubesec-bank
+description: A Helm chart for the KubeSec banking microservices application
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - banking
+  - microservices
+  - kubernetes
+  - security
+maintainers:
+  - name: KubeSec Team

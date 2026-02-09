@@ -1,0 +1,143 @@
+# Default values for the KubeSec banking microservices chart
+
+# -- Namespace for all resources
+namespace: kubesec-bank
+
+# -- Microservices configuration
+# Each service follows the same structure for consistency
+services:
+  account-service:
+    enabled: true
+    image:
+      repository: ghcr.io/your-username/kubesec-bank/account-service
+      tag: latest
+      pullPolicy: IfNotPresent
+    replicas: 1
+    port: 8081
+    healthPath: /health
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "250m"
+    env: {}
+
+  auth-service:
+    enabled: true
+    image:
+      repository: ghcr.io/your-username/kubesec-bank/auth-service
+      tag: latest
+      pullPolicy: IfNotPresent
+    replicas: 1
+    port: 8082
+    healthPath: /healthz
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "250m"
+    env: {}
+
+  transaction-service:
+    enabled: true
+    image:
+      repository: ghcr.io/your-username/kubesec-bank/transaction-service
+      tag: latest
+      pullPolicy: IfNotPresent
+    replicas: 1
+    port: 8083
+    healthPath: /health
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "100m"
+      limits:
+        memory: "128Mi"
+        cpu: "250m"
+    env: {}
+
+# -- Pod security context applied to all service pods
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+# -- Container security context applied to all service containers
+containerSecurityContext:
+  runAsNonRoot: true
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+# -- PostgreSQL configuration
+postgres:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "16-alpine"
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+  storage:
+    size: 1Gi
+    storageClassName: ""
+
+# -- Redis configuration
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: "7-alpine"
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "250m"
+
+# -- NATS configuration
+nats:
+  enabled: true
+  image:
+    repository: nats
+    tag: "2-alpine"
+  resources:
+    requests:
+      memory: "32Mi"
+      cpu: "50m"
+    limits:
+      memory: "64Mi"
+      cpu: "100m"
+
+# -- Shared configuration values (stored in ConfigMap)
+config:
+  dbHost: postgres
+  dbPort: "5432"
+  dbName: kubesec_bank
+  redisAddr: "redis:6379"
+  natsUrl: "nats://nats:4222"
+  logLevel: info
+  environment: development
+
+# -- Secret values (base64 encoded placeholders)
+# WARNING: Replace these with real secrets or use an external secrets manager in production
+secrets:
+  dbUser: a3ViZXNlY19hZG1pbg==
+  dbPassword: Y2hhbmdlbWUtaW4tcHJvZHVjdGlvbg==
+  jwtSecret: cmVwbGFjZS13aXRoLXN0cm9uZy1zZWNyZXQ=
+
+# -- Network policies configuration
+networkPolicies:
+  enabled: true

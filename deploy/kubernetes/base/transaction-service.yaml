@@ -1,0 +1,134 @@
+# Transaction Service — handles financial transactions
+# Port: 8083, Health: /health
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transaction-service
+  namespace: kubesec-bank
+  labels:
+    app: transaction-service
+    app.kubernetes.io/name: transaction-service
+    app.kubernetes.io/part-of: kubesec-bank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction-service
+  template:
+    metadata:
+      labels:
+        app: transaction-service
+        app.kubernetes.io/name: transaction-service
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: transaction-service
+          image: ghcr.io/your-username/kubesec-bank/transaction-service:latest
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8083
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8083
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: DB_PORT
+            - name: REDIS_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: REDIS_ADDR
+            - name: NATS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: NATS_URL
+            - name: ACCOUNT_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: ACCOUNT_SERVICE_URL
+            - name: AUTH_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: AUTH_SERVICE_URL
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: kubesec-secrets
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kubesec-secrets
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: kubesec-config
+                  key: DB_NAME
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kubesec-secrets
+                  key: JWT_SECRET
+---
+# Transaction Service ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction-service
+  namespace: kubesec-bank
+  labels:
+    app: transaction-service
+    app.kubernetes.io/name: transaction-service
+    app.kubernetes.io/part-of: kubesec-bank
+spec:
+  type: ClusterIP
+  selector:
+    app: transaction-service
+  ports:
+    - port: 8083
+      targetPort: 8083
+      protocol: TCP
+      name: http

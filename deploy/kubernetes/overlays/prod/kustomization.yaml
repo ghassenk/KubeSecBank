@@ -1,0 +1,99 @@
+# Prod overlay — 3 replicas for services, higher resources, pinned image tags
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+# Pin specific image versions in production (update these for each release)
+images:
+  - name: ghcr.io/your-username/kubesec-bank/account-service
+    newTag: v0.1.0
+  - name: ghcr.io/your-username/kubesec-bank/auth-service
+    newTag: v0.1.0
+  - name: ghcr.io/your-username/kubesec-bank/transaction-service
+    newTag: v0.1.0
+
+# Patch deployments: 3 replicas and higher resource limits for production
+patches:
+  # Account service — 3 replicas, production resources
+  - target:
+      kind: Deployment
+      name: account-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: account-service
+      spec:
+        replicas: 3
+        template:
+          spec:
+            containers:
+              - name: account-service
+                resources:
+                  requests:
+                    memory: "128Mi"
+                    cpu: "250m"
+                  limits:
+                    memory: "256Mi"
+                    cpu: "500m"
+
+  # Auth service — 3 replicas, production resources
+  - target:
+      kind: Deployment
+      name: auth-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: auth-service
+      spec:
+        replicas: 3
+        template:
+          spec:
+            containers:
+              - name: auth-service
+                resources:
+                  requests:
+                    memory: "128Mi"
+                    cpu: "250m"
+                  limits:
+                    memory: "256Mi"
+                    cpu: "500m"
+
+  # Transaction service — 3 replicas, production resources
+  - target:
+      kind: Deployment
+      name: transaction-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: transaction-service
+      spec:
+        replicas: 3
+        template:
+          spec:
+            containers:
+              - name: transaction-service
+                resources:
+                  requests:
+                    memory: "128Mi"
+                    cpu: "250m"
+                  limits:
+                    memory: "256Mi"
+                    cpu: "500m"
+
+  # Override environment to production
+  - target:
+      kind: ConfigMap
+      name: kubesec-config
+    patch: |-
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: kubesec-config
+      data:
+        ENVIRONMENT: "production"
+        LOG_LEVEL: "warn"

@@ -1,0 +1,116 @@
+version: "3.9"
+
+services:
+  # --- Infrastructure ---
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-kubesec}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kubesec_secret}
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-databases.sql:/docker-entrypoint-initdb.d/01-init-databases.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - kubesec-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kubesec}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - kubesec-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  nats:
+    image: nats:2-alpine
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - kubesec-net
+    healthcheck:
+      test: ["CMD", "nats-server", "--signal", "ldm"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # --- Application Services ---
+
+  account-service:
+    build:
+      context: ./services/account-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kubesec}:${POSTGRES_PASSWORD:-kubesec_secret}@postgres:5432/account_db?sslmode=disable
+      SERVER_PORT: "8081"
+      NATS_URL: nats://nats:4222
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+    networks:
+      - kubesec-net
+    restart: on-failure
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kubesec}:${POSTGRES_PASSWORD:-kubesec_secret}@postgres:5432/auth_db?sslmode=disable
+      SERVER_PORT: "8082"
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kubesec-net
+    restart: on-failure
+
+  transaction-service:
+    build:
+      context: ./services/transaction-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-kubesec}:${POSTGRES_PASSWORD:-kubesec_secret}@postgres:5432/transaction_db?sslmode=disable
+      SERVER_PORT: "8083"
+      NATS_URL: nats://nats:4222
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+    networks:
+      - kubesec-net
+    restart: on-failure
+
+networks:
+  kubesec-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,21 @@
+# Kustomize base configuration for KubeSec banking microservices
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: kubesec-bank
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - secrets.yaml
+  - postgres.yaml
+  - redis.yaml
+  - nats.yaml
+  - account-service.yaml
+  - auth-service.yaml
+  - transaction-service.yaml
+  - network-policy.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: kubesec-bank
+  app.kubernetes.io/managed-by: kustomize

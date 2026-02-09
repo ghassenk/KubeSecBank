@@ -1,0 +1,29 @@
+# Shared configuration for all KubeSec banking microservices
+# Contains non-sensitive configuration values
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubesec-config
+  namespace: kubesec-bank
+  labels:
+    app.kubernetes.io/part-of: kubesec-bank
+data:
+  # Database configuration
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_NAME: "kubesec_bank"
+
+  # Redis configuration
+  REDIS_ADDR: "redis:6379"
+
+  # NATS messaging configuration
+  NATS_URL: "nats://nats:4222"
+
+  # Internal service URLs for inter-service communication
+  ACCOUNT_SERVICE_URL: "http://account-service:8081"
+  AUTH_SERVICE_URL: "http://auth-service:8082"
+  TRANSACTION_SERVICE_URL: "http://transaction-service:8083"
+
+  # Application settings
+  LOG_LEVEL: "info"
+  ENVIRONMENT: "development"

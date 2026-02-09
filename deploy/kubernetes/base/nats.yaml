@@ -1,0 +1,76 @@
+# NATS Deployment — lightweight messaging for inter-service communication
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+  namespace: kubesec-bank
+  labels:
+    app: nats
+    app.kubernetes.io/name: nats
+    app.kubernetes.io/part-of: kubesec-bank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+        app.kubernetes.io/name: nats
+    spec:
+      containers:
+        - name: nats
+          image: nats:2-alpine
+          ports:
+            - containerPort: 4222
+              protocol: TCP
+              name: client
+            - containerPort: 8222
+              protocol: TCP
+              name: monitoring
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8222
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8222
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+---
+# NATS ClusterIP Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  namespace: kubesec-bank
+  labels:
+    app: nats
+    app.kubernetes.io/name: nats
+    app.kubernetes.io/part-of: kubesec-bank
+spec:
+  type: ClusterIP
+  selector:
+    app: nats
+  ports:
+    - port: 4222
+      targetPort: 4222
+      protocol: TCP
+      name: client
+    - port: 8222
+      targetPort: 8222
+      protocol: TCP
+      name: monitoring

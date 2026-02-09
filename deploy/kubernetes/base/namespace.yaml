@@ -1,0 +1,8 @@
+# Namespace for the KubeSec banking microservices application
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubesec-bank
+  labels:
+    app.kubernetes.io/part-of: kubesec-bank
+    app.kubernetes.io/managed-by: kustomize
