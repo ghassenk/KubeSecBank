@@ -1,4 +1,4 @@
-module github.com/kubesec-bank/auth-service
+module github.com/ghassenk/KubeSecBank/services/auth-service
 
 go 1.22
 

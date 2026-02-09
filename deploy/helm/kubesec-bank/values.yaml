@@ -9,7 +9,7 @@ services:
   account-service:
     enabled: true
     image:
-      repository: ghcr.io/your-username/kubesec-bank/account-service
+      repository: ghcr.io/ghassenk/kubesecbank/account-service
       tag: latest
       pullPolicy: IfNotPresent
     replicas: 1
@@ -27,7 +27,7 @@ services:
   auth-service:
     enabled: true
     image:
-      repository: ghcr.io/your-username/kubesec-bank/auth-service
+      repository: ghcr.io/ghassenk/kubesecbank/auth-service
       tag: latest
       pullPolicy: IfNotPresent
     replicas: 1
@@ -45,7 +45,7 @@ services:
   transaction-service:
     enabled: true
     image:
-      repository: ghcr.io/your-username/kubesec-bank/transaction-service
+      repository: ghcr.io/ghassenk/kubesecbank/transaction-service
       tag: latest
       pullPolicy: IfNotPresent
     replicas: 1

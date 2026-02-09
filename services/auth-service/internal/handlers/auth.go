@@ -10,10 +10,10 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/kubesec-bank/auth-service/internal/config"
-	"github.com/kubesec-bank/auth-service/internal/middleware"
-	"github.com/kubesec-bank/auth-service/internal/models"
-	"github.com/kubesec-bank/auth-service/internal/repository"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/config"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/middleware"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/repository"
 )
 
 // AuthHandler holds dependencies for authentication endpoints.

@@ -14,10 +14,10 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/nats-io/nats.go"
 
-	"github.com/kubesec-bank/transaction-service/internal/config"
-	"github.com/kubesec-bank/transaction-service/internal/handlers"
-	"github.com/kubesec-bank/transaction-service/internal/middleware"
-	"github.com/kubesec-bank/transaction-service/internal/repository"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/config"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/handlers"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/middleware"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/repository"
 )
 
 func main() {

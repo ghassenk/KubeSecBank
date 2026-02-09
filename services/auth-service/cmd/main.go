@@ -14,10 +14,10 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/kubesec-bank/auth-service/internal/config"
-	"github.com/kubesec-bank/auth-service/internal/handlers"
-	"github.com/kubesec-bank/auth-service/internal/middleware"
-	"github.com/kubesec-bank/auth-service/internal/repository"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/config"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/handlers"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/middleware"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/repository"
 )
 
 func main() {

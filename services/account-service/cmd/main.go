@@ -12,10 +12,10 @@ import (
 
 	_ "github.com/lib/pq"
 
-	"github.com/kubesec-bank/account-service/internal/config"
-	"github.com/kubesec-bank/account-service/internal/handlers"
-	"github.com/kubesec-bank/account-service/internal/middleware"
-	"github.com/kubesec-bank/account-service/internal/repository"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/config"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/handlers"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/middleware"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/repository"
 )
 
 func main() {

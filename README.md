@@ -6,7 +6,7 @@ A microservices-based banking application built for learning Kubernetes and cont
 
 ```
 ┌──────────┐     ┌──────────────┐     ┌─────────────────┐
-│  Client   │────▶│  API Gateway │────▶│ Account Service │──▶ PostgreSQL
+│  Client  │────▶│  API Gateway │────▶│ Account Service │──▶ PostgreSQL
 └──────────┘     │  (Ingress)   │     └─────────────────┘
                  │              │     ┌─────────────────┐
                  │              │────▶│  Auth Service    │──▶ PostgreSQL + Redis

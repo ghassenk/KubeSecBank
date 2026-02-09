@@ -1,7 +1,7 @@
 .PHONY: all build test lint clean docker-build docker-push run-local
 
 SERVICES := account-service auth-service transaction-service
-REGISTRY ?= ghcr.io/your-username/kubesec-bank
+REGISTRY ?= ghcr.io/ghassenk/kubesecbank
 TAG ?= latest
 
 all: lint test build

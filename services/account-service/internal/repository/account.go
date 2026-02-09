@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/kubesec-bank/account-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/models"
 	"github.com/shopspring/decimal"
 )
 

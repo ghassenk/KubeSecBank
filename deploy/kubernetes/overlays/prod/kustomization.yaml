@@ -7,11 +7,11 @@ resources:
 
 # Pin specific image versions in production (update these for each release)
 images:
-  - name: ghcr.io/your-username/kubesec-bank/account-service
+  - name: ghcr.io/ghassenk/kubesecbank/account-service
     newTag: v0.1.0
-  - name: ghcr.io/your-username/kubesec-bank/auth-service
+  - name: ghcr.io/ghassenk/kubesecbank/auth-service
     newTag: v0.1.0
-  - name: ghcr.io/your-username/kubesec-bank/transaction-service
+  - name: ghcr.io/ghassenk/kubesecbank/transaction-service
     newTag: v0.1.0
 
 # Patch deployments: 3 replicas and higher resource limits for production

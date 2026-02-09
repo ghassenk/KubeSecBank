@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/kubesec-bank/transaction-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/models"
 )
 
 // TransactionRepository defines the data-access interface for transactions.

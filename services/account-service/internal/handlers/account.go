@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/kubesec-bank/account-service/internal/models"
-	"github.com/kubesec-bank/account-service/internal/repository"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/account-service/internal/repository"
 )
 
 type AccountHandler struct {

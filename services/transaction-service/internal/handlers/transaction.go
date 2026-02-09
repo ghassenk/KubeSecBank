@@ -12,8 +12,8 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/shopspring/decimal"
 
-	"github.com/kubesec-bank/transaction-service/internal/models"
-	"github.com/kubesec-bank/transaction-service/internal/repository"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/transaction-service/internal/repository"
 )
 
 // balanceResponse is the expected shape from account-service's balance endpoint.

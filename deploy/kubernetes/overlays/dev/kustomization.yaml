@@ -7,11 +7,11 @@ resources:
 
 # Override image tags to use :latest for dev
 images:
-  - name: ghcr.io/your-username/kubesec-bank/account-service
+  - name: ghcr.io/ghassenk/kubesecbank/account-service
     newTag: latest
-  - name: ghcr.io/your-username/kubesec-bank/auth-service
+  - name: ghcr.io/ghassenk/kubesecbank/auth-service
     newTag: latest
-  - name: ghcr.io/your-username/kubesec-bank/transaction-service
+  - name: ghcr.io/ghassenk/kubesecbank/transaction-service
     newTag: latest
 
 # Patch deployments: single replica and lower resource limits for dev

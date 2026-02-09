@@ -8,7 +8,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/kubesec-bank/auth-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/models"
 )
 
 // AuthRepository defines the interface for auth-related data operations.

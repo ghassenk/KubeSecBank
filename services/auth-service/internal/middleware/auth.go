@@ -9,7 +9,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/kubesec-bank/auth-service/internal/models"
+	"github.com/ghassenk/KubeSecBank/services/auth-service/internal/models"
 )
 
 // contextKey is an unexported type for context keys in this package.
