@@ -53,7 +53,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
         synchronized (timestamps) {
             if (timestamps.size() >= LIMIT) {
                 response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_TOO_MANY_REQUESTS);
+                response.setStatus(429);
                 response.getWriter().write("{\"error\":\"rate limit exceeded\"}");
                 return;
             }
