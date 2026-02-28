@@ -9,10 +9,10 @@ A microservices-based banking application built for learning Kubernetes and cont
 │  Client  │────▶│  API Gateway │────▶│ Account Service │──▶ PostgreSQL
 └──────────┘     │  (Ingress)   │     └─────────────────┘
                  │              │     ┌─────────────────┐
-                 │              │────▶│  Auth Service    │──▶ PostgreSQL + Redis
+                 │              │────▶│  Auth Service   │──▶ PostgreSQL + Redis
                  │              │     └─────────────────┘
                  │              │     ┌─────────────────────┐
-                 │              │────▶│ Transaction Service  │──▶ PostgreSQL
+                 │              │────▶│ Transaction Service │──▶ PostgreSQL
                  └──────────────┘     └─────────────────────┘
                                               │
                                               ▼
@@ -31,7 +31,8 @@ A microservices-based banking application built for learning Kubernetes and cont
 
 ### Prerequisites
 
-- Go 1.22+
+- JDK 21+
+- Maven 3.9+ (or use included Maven Wrapper `./mvnw`)
 - Docker & Docker Compose
 - kubectl
 - Kind or Minikube (for local K8s)
@@ -45,7 +46,7 @@ docker-compose up -d
 
 # Run a service locally
 cd services/account-service
-go run cmd/main.go
+./mvnw spring-boot:run
 ```
 
 ### Kubernetes Deployment

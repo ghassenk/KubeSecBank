@@ -33,11 +33,11 @@ patches:
               - name: account-service
                 resources:
                   requests:
-                    memory: "128Mi"
+                    memory: "384Mi"
                     cpu: "250m"
                   limits:
-                    memory: "256Mi"
-                    cpu: "500m"
+                    memory: "768Mi"
+                    cpu: "1000m"
 
   # Auth service — 3 replicas, production resources
   - target:
@@ -56,11 +56,11 @@ patches:
               - name: auth-service
                 resources:
                   requests:
-                    memory: "128Mi"
+                    memory: "384Mi"
                     cpu: "250m"
                   limits:
-                    memory: "256Mi"
-                    cpu: "500m"
+                    memory: "768Mi"
+                    cpu: "1000m"
 
   # Transaction service — 3 replicas, production resources
   - target:
@@ -79,11 +79,11 @@ patches:
               - name: transaction-service
                 resources:
                   requests:
-                    memory: "128Mi"
+                    memory: "384Mi"
                     cpu: "250m"
                   limits:
-                    memory: "256Mi"
-                    cpu: "500m"
+                    memory: "768Mi"
+                    cpu: "1000m"
 
   # Override environment to production
   - target:

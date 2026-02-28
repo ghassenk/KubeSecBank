@@ -33,11 +33,11 @@ patches:
               - name: account-service
                 resources:
                   requests:
-                    memory: "32Mi"
-                    cpu: "50m"
-                  limits:
-                    memory: "64Mi"
+                    memory: "192Mi"
                     cpu: "100m"
+                  limits:
+                    memory: "384Mi"
+                    cpu: "250m"
 
   # Auth service — 1 replica, reduced resources
   - target:
@@ -56,11 +56,11 @@ patches:
               - name: auth-service
                 resources:
                   requests:
-                    memory: "32Mi"
-                    cpu: "50m"
-                  limits:
-                    memory: "64Mi"
+                    memory: "192Mi"
                     cpu: "100m"
+                  limits:
+                    memory: "384Mi"
+                    cpu: "250m"
 
   # Transaction service — 1 replica, reduced resources
   - target:
@@ -79,11 +79,11 @@ patches:
               - name: transaction-service
                 resources:
                   requests:
-                    memory: "32Mi"
-                    cpu: "50m"
-                  limits:
-                    memory: "64Mi"
+                    memory: "192Mi"
                     cpu: "100m"
+                  limits:
+                    memory: "384Mi"
+                    cpu: "250m"
 
   # Override environment to development
   - target:

@@ -1,28 +1,37 @@
 # Build stage
-FROM golang:1.22-alpine AS builder
-
-RUN apk add --no-cache git ca-certificates
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /build
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn/ .mvn/
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
-COPY go.mod go.sum* ./
-RUN go mod download
+COPY src/ src/
+RUN ./mvnw package -DskipTests -B
 
-COPY . .
-
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-    -ldflags="-w -s" \
-    -o /build/auth-service \
-    ./cmd/main.go
+# Extract layers for better caching
+RUN java -Djarmode=layertools -jar target/*.jar extract --destination /extracted
 
 # Runtime stage
-FROM scratch
+FROM eclipse-temurin:21-jre-alpine
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /build/auth-service /auth-service
+RUN addgroup -g 1000 appgroup && adduser -u 1000 -G appgroup -D appuser
 
-USER 65534:65534
+WORKDIR /app
+
+COPY --from=builder /extracted/dependencies/ ./
+COPY --from=builder /extracted/spring-boot-loader/ ./
+COPY --from=builder /extracted/snapshot-dependencies/ ./
+COPY --from=builder /extracted/application/ ./
+
+RUN chown -R appuser:appgroup /app
+USER 1000:1000
 
 EXPOSE 8082
 
-ENTRYPOINT ["/auth-service"]
+ENTRYPOINT ["java", \
+    "-XX:MaxRAMPercentage=75.0", \
+    "-XX:+UseG1GC", \
+    "-Djava.security.egd=file:/dev/./urandom", \
+    "org.springframework.boot.loader.launch.JarLauncher"]

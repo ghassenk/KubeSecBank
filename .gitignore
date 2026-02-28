@@ -5,11 +5,12 @@ bin/
 *.so
 *.dylib
 
-# Go
-vendor/
-*.test
-*.out
-coverage.txt
+# Java
+*.class
+*.jar
+*.war
+target/
+!.mvn/wrapper/maven-wrapper.jar
 
 # Environment
 .env

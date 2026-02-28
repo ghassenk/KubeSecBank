@@ -10,21 +10,21 @@ all: lint test build
 build:
 	@for svc in $(SERVICES); do \
 		echo "Building $$svc..."; \
-		cd services/$$svc && go build -o ../../bin/$$svc ./cmd/main.go && cd ../..; \
+		cd services/$$svc && ./mvnw package -DskipTests -B && cd ../..; \
 	done
 
 ## Test
 test:
 	@for svc in $(SERVICES); do \
 		echo "Testing $$svc..."; \
-		cd services/$$svc && go test ./... -v -coverprofile=../../coverage-$$svc.txt && cd ../..; \
+		cd services/$$svc && ./mvnw test -B && cd ../..; \
 	done
 
 ## Lint
 lint:
 	@for svc in $(SERVICES); do \
 		echo "Linting $$svc..."; \
-		cd services/$$svc && golangci-lint run ./... && cd ../..; \
+		cd services/$$svc && ./mvnw checkstyle:check -B && cd ../..; \
 	done
 
 ## Docker
@@ -69,3 +69,6 @@ scan-manifests:
 ## Clean
 clean:
 	rm -rf bin/ coverage-*.txt
+	@for svc in $(SERVICES); do \
+		cd services/$$svc && ./mvnw clean -B && cd ../..; \
+	done

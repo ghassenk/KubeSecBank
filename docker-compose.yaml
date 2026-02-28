@@ -65,6 +65,7 @@ services:
       DB_NAME: account_db
       SERVER_PORT: "8081"
       NATS_URL: nats://nats:4222
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75.0"
     depends_on:
       postgres:
         condition: service_healthy
@@ -87,8 +88,10 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD:-kubesec_secret}
       DB_NAME: auth_db
       SERVER_PORT: "8082"
-      REDIS_ADDR: redis:6379
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75.0"
     depends_on:
       postgres:
         condition: service_healthy
@@ -112,6 +115,9 @@ services:
       DB_NAME: transaction_db
       SERVER_PORT: "8083"
       NATS_URL: nats://nats:4222
+      AUTH_SERVICE_URL: http://auth-service:8082
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=75.0"
     depends_on:
       postgres:
         condition: service_healthy

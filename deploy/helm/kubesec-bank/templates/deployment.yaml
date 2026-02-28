@@ -42,22 +42,25 @@ spec:
             {{- toYaml $svc.resources | nindent 12 }}
           securityContext:
             {{- toYaml $.Values.containerSecurityContext | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           livenessProbe:
             httpGet:
               path: {{ $svc.healthPath }}
               port: {{ $svc.port }}
-            initialDelaySeconds: 15
+            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 3
+            failureThreshold: 5
           readinessProbe:
             httpGet:
               path: {{ $svc.healthPath }}
               port: {{ $svc.port }}
-            initialDelaySeconds: 5
+            initialDelaySeconds: 15
             periodSeconds: 5
             timeoutSeconds: 3
-            failureThreshold: 3
+            failureThreshold: 5
           env:
             - name: DB_HOST
               valueFrom:
@@ -103,5 +106,10 @@ spec:
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end }}
+      volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: "64Mi"
 {{- end }}
 {{- end }}
