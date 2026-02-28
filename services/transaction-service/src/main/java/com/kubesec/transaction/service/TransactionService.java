@@ -10,6 +10,7 @@ import com.kubesec.transaction.model.dto.TransferRequest;
 import com.kubesec.transaction.repository.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ public class TransactionService {
 
     public TransactionService(TransactionRepository repository,
                               AccountServiceClient accountClient,
-                              NatsPublisher natsPublisher) {
+                              @Nullable NatsPublisher natsPublisher) {
         this.repository = repository;
         this.accountClient = accountClient;
         this.natsPublisher = natsPublisher;
@@ -95,7 +96,9 @@ public class TransactionService {
                 txn.getAmount(), txn.getCurrency(), txn.getType(),
                 txn.getStatus(), txn.getUpdatedAt()
         );
-        natsPublisher.publishTransactionCompleted(event);
+        if (natsPublisher != null) {
+            natsPublisher.publishTransactionCompleted(event);
+        }
 
         return txn;
     }
