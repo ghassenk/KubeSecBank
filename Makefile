@@ -1,4 +1,4 @@
-.PHONY: all build test lint clean docker-build docker-push run-local
+.PHONY: all build test lint clean docker-build docker-push kind-load run-local
 
 SERVICES := account-service auth-service transaction-service
 REGISTRY ?= ghcr.io/ghassenk/kubesecbank
@@ -49,6 +49,12 @@ stop-local:
 ## Kubernetes (Kind)
 cluster-create:
 	kind create cluster --name kubesec-bank --config scripts/kind-config.yaml
+
+kind-load:
+	@for svc in $(SERVICES); do \
+		echo "Loading $$svc into Kind..."; \
+		kind load docker-image $(REGISTRY)/$$svc:$(TAG) --name kubesec-bank; \
+	done
 
 cluster-delete:
 	kind delete cluster --name kubesec-bank

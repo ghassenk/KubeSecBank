@@ -14,7 +14,8 @@
       "Bash(curl -sL https://raw.githubusercontent.com/apache/maven-wrapper/refs/tags/maven-wrapper-3.3.2/maven-wrapper-distribution/src/resources/mvnw -o /Users/ghassen/code/claude-code/KubeSec/services/account-service/mvnw)",
       "Bash(chmod +x /Users/ghassen/code/claude-code/KubeSec/services/account-service/mvnw)",
       "Bash(make test)",
-      "Bash(./mvnw test -B)"
+      "Bash(./mvnw test -B)",
+      "Bash(./mvnw compile -B -q)"
     ]
   }
 }

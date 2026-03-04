@@ -49,18 +49,92 @@ cd services/account-service
 ./mvnw spring-boot:run
 ```
 
-### Kubernetes Deployment
+### Building
 
 ```bash
-# Create a local cluster
-kind create cluster --name kubesec-bank
+# Build all services (Maven)
+make build
 
-# Deploy with Helm
-helm install kubesec-bank deploy/helm/kubesec-bank/
-
-# Or with plain manifests
-kubectl apply -k deploy/kubernetes/overlays/dev/
+# Build Docker images
+make docker-build
 ```
+
+### Testing
+
+```bash
+# Run unit tests for all services
+make test
+
+# Test a single service
+cd services/account-service
+./mvnw test
+```
+
+### Kubernetes Deployment (Kind)
+
+Kind runs a local Kubernetes cluster inside Docker. The cluster container will appear in Docker Desktop.
+
+```bash
+# 1. Create a local Kind cluster
+make cluster-create
+
+# 2. Build Docker images
+make docker-build
+
+# 3. Load images into Kind
+make kind-load
+
+# 4. Deploy with Kustomize (dev overlay)
+make deploy-dev
+
+# 5. Verify pods are running
+kubectl get pods -n kubesec-bank -w
+
+# 6. Port-forward to test a service
+kubectl port-forward -n kubesec-bank svc/account-service 8081:8081
+curl http://localhost:8081/health
+```
+
+Or deploy with Helm instead of Kustomize:
+
+```bash
+helm install kubesec-bank deploy/helm/kubesec-bank/
+```
+
+To tear down:
+
+```bash
+make cluster-delete
+```
+
+### Makefile Targets
+
+#### Quick summary of Makefile targets
+
+
+```bash
+make docker-build # Build all Docker images
+make cluster-create # Create Kind cluster
+make deploy-dev	# Deploy to Kind with dev overlay
+make cluster-delete	# Tear down the cluster
+```
+
+| Target | Description |
+|--------|-------------|
+| `make build` | Build all services (Maven, skip tests) |
+| `make test` | Run unit tests for all services |
+| `make lint` | Run Checkstyle on all services |
+| `make docker-build` | Build Docker images for all services |
+| `make docker-push` | Push Docker images to registry |
+| `make run-local` | Start infrastructure with docker-compose |
+| `make stop-local` | Stop docker-compose |
+| `make cluster-create` | Create a local Kind cluster |
+| `make kind-load` | Load Docker images into Kind cluster |
+| `make cluster-delete` | Delete the Kind cluster |
+| `make deploy-dev` | Deploy to Kubernetes (dev overlay) |
+| `make scan-images` | Run Trivy image scans |
+| `make scan-manifests` | Run Trivy on K8s manifests |
+| `make clean` | Remove build artifacts |
 
 ## Security Focus Areas
 
